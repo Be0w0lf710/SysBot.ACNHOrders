@@ -52,6 +52,9 @@ namespace SysBot.ACNHOrders
 
         public DodoRestoreConfig DodoModeConfig { get; set; } = new();
 
+        /// <summary> When enabled, users in Discord can request the bot to to change the island layout using $loadlayer. </summary>
+        public bool AllowLayoutChange { get; set; }
+
         /// <summary> When enabled, users in Discord can request the bot to pick up items (spamming Y a <see cref="DropBotConfig.PickupCount"/> times). </summary>
         public bool AllowClean { get; set; }
 
@@ -82,11 +85,14 @@ namespace SysBot.ACNHOrders
         /// <summary> How much extra time, if any, should we wait while orville is connecting to the internet in milliseconds </summary>
         public int ExtraTimeConnectionWait { get; set; } = 1000;
 
-        /// <summary> Should we check instant text offset to see if we are still in dialogue, and if so should we keep mashing B? </summary>
-        public bool AttemptMitigateDialogueWarping { get; set; } = false;
-
         /// <summary> Should we not use instant text? </summary>
         public bool LegacyDodoCodeRetrieval { get; set; } = false;
+
+        /// <summary> Should we not use instant text? </summary>
+        public bool FriendDodoCodeRetrieval { get; set; } = false;
+
+        /// <summary> Should we not use instant text? </summary>
+        public bool FriendGateOpen { get; set; } = false;
 
         /// <summary> Should we freeze instant text? </summary>
         public bool ExperimentalFreezeDodoCodeRetrieval { get; set; } = false;
@@ -111,9 +117,6 @@ namespace SysBot.ACNHOrders
 
         /// <summary> Should we press up once before starting the game? Not guaranteed to avoid the update, but the bot will try its best. </summary>
         public bool AvoidSystemUpdate { get; set; } = true;
-
-        /// <summary> Experimental SignalR functionality </summary>
-        public WebConfig SignalrConfig { get; set; } = new();
 
         #endregion
 
