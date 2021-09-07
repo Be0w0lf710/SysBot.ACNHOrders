@@ -11,19 +11,19 @@ namespace SysBot.ACNHOrders
     public class VillagerModule : ModuleBase<SocketCommandContext>
     {
 
-        [Command("injectVillager"), Alias("iv")]
-        [Summary("Injects a villager based on the internal name.")]
+        [Command("RequestVillager"), Alias("rv")]
+        [Summary("Adds a villager based on the internal name.")]
         [RequireQueueRole(nameof(Globals.Bot.Config.RoleUseBot))]
         public async Task InjectVillagerAsync(int index, string internalName) => await InjectVillagers(index, new string[1] { internalName });
         
 
-        [Command("injectVillager"), Alias("iv")]
-        [Summary("Injects a villager based on the internal name.")]
+        [Command("RequestVillager"), Alias("RV")]
+        [Summary("Adds a villager based on the internal name.")]
         [RequireQueueRole(nameof(Globals.Bot.Config.RoleUseBot))]
         public async Task InjectVillagerAsync(string internalName) => await InjectVillagerAsync(0, internalName).ConfigureAwait(false);
 
-        [Command("multiVillager"), Alias("mvi", "injectVillagerMulti", "superUltraInjectionGiveMeMoreVillagers")]
-        [Summary("Injects multiple villagers based on the internal names.")]
+        [Command("multiVillager"), Alias("mvi", "RequestVillagerMulti", "superUltraInjectionGiveMeMoreVillagers")]
+        [Summary("Adds multiple villagers based on the internal names.")]
         [RequireQueueRole(nameof(Globals.Bot.Config.RoleUseBot))]
         public async Task InjectVillagerMultiAsync([Remainder]string names) => await InjectVillagers(0, names.Split(new string[2] { ",", " ", }, StringSplitOptions.RemoveEmptyEntries));
 
@@ -31,13 +31,13 @@ namespace SysBot.ACNHOrders
         {
             if (!Globals.Bot.Config.DodoModeConfig.LimitedDodoRestoreOnlyMode)
             {
-                await ReplyAsync($"{Context.User.Mention} - Villagers cannot be injected in order mode.").ConfigureAwait(false);
+                await ReplyAsync($"{Context.User.Mention} - Villagers cannot be added in order mode.").ConfigureAwait(false);
                 return;
             }
 
             if (!Globals.Bot.Config.AllowVillagerInjection)
             {
-                await ReplyAsync($"{Context.User.Mention} - Villager injection is currently disabled.").ConfigureAwait(false);
+                await ReplyAsync($"{Context.User.Mention} - Villager requests is currently disabled.").ConfigureAwait(false);
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace SysBot.ACNHOrders
 
                 if (index > byte.MaxValue || index < 0)
                 {
-                    await ReplyAsync($"{Context.User.Mention} - {index} is not a valid index");
+                    await ReplyAsync($"{Context.User.Mention} - {index} is not a valid house");
                     return;
                 }
 
@@ -86,8 +86,8 @@ namespace SysBot.ACNHOrders
                     OnFinish = success =>
                     {
                         var reply = success
-                            ? $"{nameSearched} has been injected by the bot at Index {slot}. Please go talk to them!{extraMsg}"
-                            : "Failed to inject villager. Please tell the bot owner to look at the logs!";
+                            ? $"{nameSearched} has been added by the bot in house {slot}. Please go talk to them!{extraMsg}"
+                            : "Failed to add villager. Please tell the bot owner to look at the logs!";
                         Task.Run(async () => await ReplyAsync($"{mention}: {reply}").ConfigureAwait(false));
                     }
                 };
@@ -97,8 +97,8 @@ namespace SysBot.ACNHOrders
                 index = (index + 1) % 10;
             }
 
-            var addMsg = count > 1 ? $"Villager inject request for {count} villagers have" : "Villager inject request has";
-            var msg = $"{Context.User.Mention}: {addMsg} been added to the queue and will be injected momentarily. I will reply to you once this has completed.";
+            var addMsg = count > 1 ? $"Villager request for {count} villagers have" : "Villager request has";
+            var msg = $"{Context.User.Mention}: {addMsg} been added to the queue and will be added momentarily. I will reply to you once this has completed.";
             await ReplyAsync(msg).ConfigureAwait(false);
         }
 

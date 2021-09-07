@@ -63,7 +63,7 @@ namespace SysBot.ACNHOrders
                     return;
                 }
 
-                var msg = $"{item.Value:X4} {item.Text}: Recipe order code: {recipeID:X3}000016A2";
+                var msg = $"{item.Value:X4} {item.Text}: Recipe {recipeID:X3} {item.Text}: Recipe order code: {recipeID:X3}000016A2";
                 await ReplyAsync(Format.Code(msg)).ConfigureAwait(false);
                 return;
             }
@@ -75,7 +75,7 @@ namespace SysBot.ACNHOrders
                 if (!ItemParser.InvertedRecipeDictionary.TryGetValue((ushort)item.Value, out var recipeID))
                     continue;
 
-                var msg = $"{item.Value:X4} {item.Text}: Recipe order code: {recipeID:X3}000016A2";
+                var msg = $"{item.Value:X4} {item.Text}: Recipe {recipeID:X3} {item.Text}: Recipe order code: {recipeID:X3}000016A2";
                 matches.Add(msg);
             }
 
