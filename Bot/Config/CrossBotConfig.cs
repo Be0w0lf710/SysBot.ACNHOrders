@@ -85,13 +85,17 @@ namespace SysBot.ACNHOrders
         /// <summary> How much extra time, if any, should we wait while orville is connecting to the internet in milliseconds </summary>
         public int ExtraTimeConnectionWait { get; set; } = 1000;
 
+        /// <summary> Should we check instant text offset to see if we are still in dialogue, and if so should we keep mashing B? </summary>
+        public bool AttemptMitigateDialogueWarping { get; set; } = false;
+
+
         /// <summary> Should we not use instant text? </summary>
         public bool LegacyDodoCodeRetrieval { get; set; } = false;
 
-        /// <summary> Should we not use instant text? </summary>
+        /// <summary> Should we open gates to friends only with dodo code? </summary>
         public bool FriendDodoCodeRetrieval { get; set; } = false;
 
-        /// <summary> Should we not use instant text? </summary>
+        /// <summary> Should we open gate to all friends? </summary>
         public bool FriendGateOpen { get; set; } = false;
 
         /// <summary> Should we freeze instant text? </summary>
@@ -117,6 +121,10 @@ namespace SysBot.ACNHOrders
 
         /// <summary> Should we press up once before starting the game? Not guaranteed to avoid the update, but the bot will try its best. </summary>
         public bool AvoidSystemUpdate { get; set; } = true;
+
+        /// <summary> Experimental SignalR functionality </summary>
+        public WebConfig SignalrConfig { get; set; } = new();
+
 
         #endregion
 
