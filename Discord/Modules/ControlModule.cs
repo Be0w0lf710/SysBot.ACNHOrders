@@ -58,7 +58,7 @@ namespace SysBot.ACNHOrders
               {
                   await Task.Delay(timeDelayMinutes * 60_000, CancellationToken.None).ConfigureAwait(false);
                   Globals.Bot.RestoreRestartRequested = true;
-                  await ReplyAsync($"Fetching a new dodo code shortly.").ConfigureAwait(false);
+                  await ReplyAsync($"Requesting a new dodo code shortly.").ConfigureAwait(false);
               }, CancellationToken.None).ConfigureAwait(false);
             await ReplyAsync($"Sending request to fetch a new dodo code after {timeDelayMinutes} minutes.").ConfigureAwait(false);
         }
