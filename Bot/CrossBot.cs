@@ -53,6 +53,8 @@ namespace SysBot.ACNHOrders
 
         public VillagerHelper Villagers { get; private set; } = VillagerHelper.Empty;
 
+        public bool FriendCode { private get; set; }
+
         public CrossBot(CrossBotConfig cfg) : base(cfg)
         {
             State = new DropBotState(cfg.DropConfig);
@@ -1010,7 +1012,7 @@ namespace SysBot.ACNHOrders
 
         private async Task ResetFiles(CancellationToken token)
         {
-            string DodoDetails = Config.DodoModeConfig.MinimizeDetails ? "Opening" : $"{TownName}: Opening";
+            string DodoDetails = Config.DodoModeConfig.MinimizeDetails ? "FETCHING" : $"{TownName}: FETCHING";
             byte[] encodedText = Encoding.ASCII.GetBytes(DodoDetails);
             await FileUtil.WriteBytesToFileAsync(encodedText, Config.DodoModeConfig.DodoRestoreFilename, token).ConfigureAwait(false);
 
@@ -1197,6 +1199,58 @@ namespace SysBot.ACNHOrders
                 await Connection.SendAsync(poke, token).ConfigureAwait(false);
                 await Task.Delay(1_000, token).ConfigureAwait(false);
             }
+        }
+
+        private async Task AddFriendCode(CancellationToken token)
+        {
+            // Open screen to add friends
+            await Click(SwitchButton.B, 0_500, token).ConfigureAwait(false);
+            await Task.Delay(0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.HOME, 0_800, token).ConfigureAwait(false);
+            await Task.Delay(0_300, token).ConfigureAwait(false);
+            
+            await Click(SwitchButton.DUP, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.A, 0_500, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.DUP, 0_500, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.A, 0_500, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.DUP, 0_500, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.A, 0_500, token).ConfigureAwait(false);
+
+
+            //Enter 12 digit code from discord command
+            char[] fcSpl = friendCode.ToCharArray();
+            HidKeyboardKey[] keysToPress = new HidKeyboardKey[fcSpl.Length];
+
+            for (int i = 0; i < fcSpl.Length; ++i)
+                keysToPress[i] = (HidKeyboardKey)Enum.Parse(typeof(HidKeyboardKey), (int)fcSpl[i] >= (int)'A' && (int)fcSpl[i] <= (int)'Z' ? $"HidKeyboardKey_{fcSpl[i]}" : $"HidKeyboardKey_D{fcSpl[i]}");
+            await Connection.SendAsync(SwitchCommand.TypeMultipleKeys(keysToPress), token).ConfigureAwait(false);
+
+            //Send friend request and return to game
+            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+            await Task.Delay(0_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.HOME, 0_800, token).ConfigureAwait(false);
+
+            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+
         }
 
         public bool Validate(byte[] data)
