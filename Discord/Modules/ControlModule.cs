@@ -48,6 +48,16 @@ namespace SysBot.ACNHOrders
             await ReplyAsync($"Sending request to fetch a new dodo code.").ConfigureAwait(false);
         }
 
+        [Command("addfriend")]
+        [Alias("af")]
+        [Summary("Tells the bot to go to the home page and add a friend code from discord command.")]
+        [RequireSudo]
+        public async Task AddFriendCode()
+        {
+            Globals.Bot.FriendCode = true;
+            await ReplyAsync($"Sending request to add a new friend to the switch.").ConfigureAwait(false);
+        }
+
         [Command("timer")]
         [Alias("timedDodo", "delayDodo")]
         [Summary("Tells the bot to restart the game after a delay and fetch a new dodo code. Only works in dodo restore mode.")]
@@ -58,7 +68,7 @@ namespace SysBot.ACNHOrders
               {
                   await Task.Delay(timeDelayMinutes * 60_000, CancellationToken.None).ConfigureAwait(false);
                   Globals.Bot.RestoreRestartRequested = true;
-                  await ReplyAsync($"Requesting a new dodo code shortly.").ConfigureAwait(false);
+                  await ReplyAsync($"Fetching a new dodo code shortly.").ConfigureAwait(false);
               }, CancellationToken.None).ConfigureAwait(false);
             await ReplyAsync($"Sending request to fetch a new dodo code after {timeDelayMinutes} minutes.").ConfigureAwait(false);
         }
