@@ -1012,7 +1012,7 @@ namespace SysBot.ACNHOrders
 
         private async Task ResetFiles(CancellationToken token)
         {
-            string DodoDetails = Config.DodoModeConfig.MinimizeDetails ? "FETCHING" : $"{TownName}: FETCHING";
+            string DodoDetails = Config.DodoModeConfig.MinimizeDetails ? "OPENING" : $"{TownName}: OPENING";
             byte[] encodedText = Encoding.ASCII.GetBytes(DodoDetails);
             await FileUtil.WriteBytesToFileAsync(encodedText, Config.DodoModeConfig.DodoRestoreFilename, token).ConfigureAwait(false);
 
@@ -1244,6 +1244,7 @@ namespace SysBot.ACNHOrders
                 await SwitchConnection.SendRaw(Encoding.ASCII.GetBytes(keyboardDictionary[c] + "\r\n"), token);
             }
 
+            // Send request and then start game
             await Task.Delay(1_500, token).ConfigureAwait(false);
             await Click(SwitchButton.PLUS, 8_000, token).ConfigureAwait(false);
             await Click(SwitchButton.A, 5_000, token).ConfigureAwait(false);
