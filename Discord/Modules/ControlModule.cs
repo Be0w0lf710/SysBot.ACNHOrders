@@ -52,10 +52,21 @@ namespace SysBot.ACNHOrders
         [Alias("af")]
         [Summary("Tells the bot to go to the home page and add a friend code from discord command.")]
         [RequireSudo]
-        public async Task AddFriendCode()
+        public async Task AddFriendCode(string friendCode)
         {
             Globals.Bot.FriendCode = true;
-            await ReplyAsync($"Sending request to add a new friend to the switch.").ConfigureAwait(false);
+            var bot = Globals.Bot;
+            var cleanFriendCode = friendCode.Replace("-", string.Empty);
+            if (cleanFriendCode.Length == 12 ||  int.TryParse(cleanFriendCode, out int numericValue))
+            {
+                await ReplyAsync("Sending request to add a new friend to the switch.").ConfigureAwait(false);
+                await bot.AddFriendCode(cleanFriendCode, CancellationToken.None);
+            }
+            else
+            {
+                await ReplyAsync("The friendcode is in a wrong format").ConfigureAwait(false);
+            }
+
         }
 
         [Command("timer")]

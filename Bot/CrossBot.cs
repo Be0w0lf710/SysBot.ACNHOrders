@@ -1201,7 +1201,7 @@ namespace SysBot.ACNHOrders
             }
         }
 
-        private async Task AddFriendCode(CancellationToken token)
+        public async Task AddFriendCode(string friendCode, CancellationToken token)
         {
             // Open screen to add friends
             await Click(SwitchButton.B, 0_500, token).ConfigureAwait(false);
@@ -1232,24 +1232,24 @@ namespace SysBot.ACNHOrders
 
             await Click(SwitchButton.DUP, 0_500, token).ConfigureAwait(false);
 
-            await Click(SwitchButton.A, 0_500, token).ConfigureAwait(false);
-
+            await Click(SwitchButton.A, 2_000, token).ConfigureAwait(false);
 
             //Enter 12 digit code from discord command
-            char[] fcSpl = friendCode.ToCharArray();
-            HidKeyboardKey[] keysToPress = new HidKeyboardKey[fcSpl.Length];
+            Dictionary<char, string> keyboardDictionary = KeyboardMapping.GetKeyMappingMap();
 
-            for (int i = 0; i < fcSpl.Length; ++i)
-                keysToPress[i] = (HidKeyboardKey)Enum.Parse(typeof(HidKeyboardKey), (int)fcSpl[i] >= (int)'A' && (int)fcSpl[i] <= (int)'Z' ? $"HidKeyboardKey_{fcSpl[i]}" : $"HidKeyboardKey_D{fcSpl[i]}");
-            await Connection.SendAsync(SwitchCommand.TypeMultipleKeys(keysToPress), token).ConfigureAwait(false);
+            foreach(char c in friendCode)
+            {   
+                await Task.Delay(0_100, token);
+                await SwitchConnection.SendRaw(Encoding.ASCII.GetBytes(keyboardDictionary[c] + "\r\n"), token);
+            }
 
             //Send friend request and return to game
-            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
-            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
-            await Task.Delay(0_500, token).ConfigureAwait(false);
-            await Click(SwitchButton.HOME, 0_800, token).ConfigureAwait(false);
+           //await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+            //await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+           // await Task.Delay(0_500, token).ConfigureAwait(false);
+           // await Click(SwitchButton.HOME, 0_800, token).ConfigureAwait(false);
 
-            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+           // await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
 
         }
 
