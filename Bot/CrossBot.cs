@@ -1211,6 +1211,7 @@ namespace SysBot.ACNHOrders
             
             await Click(SwitchButton.DUP, 0_500, token).ConfigureAwait(false);
             await Click(SwitchButton.A, 0_500, token).ConfigureAwait(false);
+            await Task.Delay(2_500, token).ConfigureAwait(false);
 
             await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
             await Click(SwitchButton.DDOWN, 0_500, token).ConfigureAwait(false);
@@ -1232,7 +1233,7 @@ namespace SysBot.ACNHOrders
 
             await Click(SwitchButton.DUP, 0_500, token).ConfigureAwait(false);
 
-            await Click(SwitchButton.A, 2_000, token).ConfigureAwait(false);
+            await Click(SwitchButton.A, 2_500, token).ConfigureAwait(false);
 
             //Enter 12 digit code from discord command
             Dictionary<char, string> keyboardDictionary = KeyboardMapping.GetKeyMappingMap();
@@ -1243,13 +1244,28 @@ namespace SysBot.ACNHOrders
                 await SwitchConnection.SendRaw(Encoding.ASCII.GetBytes(keyboardDictionary[c] + "\r\n"), token);
             }
 
-            //Send friend request and return to game
-           //await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
-            //await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
-           // await Task.Delay(0_500, token).ConfigureAwait(false);
-           // await Click(SwitchButton.HOME, 0_800, token).ConfigureAwait(false);
+            await Task.Delay(1_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.PLUS, 8_000, token).ConfigureAwait(false);
+            await Click(SwitchButton.A, 5_000, token).ConfigureAwait(false);
+            await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+            await Task.Delay(2_500, token).ConfigureAwait(false);
+            await Click(SwitchButton.HOME, 1_800, token).ConfigureAwait(false);
 
-           // await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
+            await Click(SwitchButton.A, 1_000 + Config.RestartGameWait, token).ConfigureAwait(false);
+
+            // Click away from any system updates if requested
+            if (Config.AvoidSystemUpdate)
+                await Click(SwitchButton.DUP, 0_600, token).ConfigureAwait(false);
+
+            // Start game
+            for (int i = 0; i < 2; ++i)
+                await Click(SwitchButton.A, 1_000 + Config.RestartGameWait, token).ConfigureAwait(false);
+
+            // Wait for "checking if the game can be played" wheel
+            await Task.Delay(5_000 + Config.RestartGameWait, token).ConfigureAwait(false);
+
+            for (int i = 0; i < 3; ++i)
+                await Click(SwitchButton.A, 1_000, token).ConfigureAwait(false);
 
         }
 
