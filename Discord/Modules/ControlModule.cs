@@ -69,6 +69,27 @@ namespace SysBot.ACNHOrders
 
         }
 
+        [Command("deletefriend")]
+        [Alias("df")]
+        [Summary("Tells the bot to go to the home page and remove a friend code from discord command.")]
+        [RequireSudo]
+        public async Task DeleteFriendCode(string friendCode)
+        {
+            Globals.Bot.FriendCode = true;
+            var bot = Globals.Bot;
+            var cleanFriendCode = friendCode.Replace("-", string.Empty);
+            if (cleanFriendCode.Length == 12 || int.TryParse(cleanFriendCode, out int numericValue))
+            {
+                await ReplyAsync("Sending request to delete a friend from the switch.").ConfigureAwait(false);
+                await bot.DeleteFriendCode(cleanFriendCode, CancellationToken.None);
+            }
+            else
+            {
+                await ReplyAsync("The friendcode is in a wrong format").ConfigureAwait(false);
+            }
+
+        }
+
         [Command("timer")]
         [Alias("timedDodo", "delayDodo")]
         [Summary("Tells the bot to restart the game after a delay and fetch a new dodo code. Only works in dodo restore mode.")]
@@ -79,7 +100,7 @@ namespace SysBot.ACNHOrders
               {
                   await Task.Delay(timeDelayMinutes * 60_000, CancellationToken.None).ConfigureAwait(false);
                   Globals.Bot.RestoreRestartRequested = true;
-                  await ReplyAsync($"Fetching a new dodo code shortly.").ConfigureAwait(false);
+                  await ReplyAsync($"Getting a new dodo code shortly.").ConfigureAwait(false);
               }, CancellationToken.None).ConfigureAwait(false);
             await ReplyAsync($"Sending request to fetch a new dodo code after {timeDelayMinutes} minutes.").ConfigureAwait(false);
         }
